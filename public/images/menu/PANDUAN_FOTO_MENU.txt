@@ -1,0 +1,111 @@
+================================================================================
+  PANDUAN PENAMBAHAN & PENGGANTIAN FOTO MENU DADAR BEREDAR SIDOARJO
+================================================================================
+
+Folder ini (`public/images/menu/`) berisi aset foto untuk menu-menu Dadar Beredar.
+
+FITUR SPESIAL: ZERO-CONFIG AUTO OVERRIDE
+--------------------------------------------------------------------------------
+Sistem sudah dilengkapi deteksi otomatis foto asli. Jika Anda memiliki foto asli
+dari menu tertentu, Anda CUKUP MELETAKKAN foto tersebut di folder ini dengan nama:
+    [slug-menu].jpg   (atau .png / .jpeg / .webp)
+
+Maka website akan LANGSUNG OTOMATIS menampilkan foto asli Anda tanpa perlu koding
+dan tanpa perlu mengubah database!
+
+CONTOH:
+- Anda punya foto "Dadar Ayam Suwir" -> simpan sebagai: telur-dadar-ayam-suwir.jpg
+- Anda punya foto "Dargor Daging"     -> simpan sebagai: dargor-daging.jpg
+- Anda punya foto "Es Kopi Susu"      -> simpan sebagai: es-kopi-susu-botol.jpg
+
+--------------------------------------------------------------------------------
+DAFTAR SLUG RESMI KE-68 MENU:
+--------------------------------------------------------------------------------
+
+[1. TELUR CEPLOK ORIGINAL]
+- telur-ceplok-lugu.jpg
+- telur-ceplok-ayam-suwir.jpg
+- telur-ceplok-ceker.jpg
+- telur-ceplok-kulit.jpg
+- telur-ceplok-paru.jpg
+- telur-ceplok-ayam-teriyaki.jpg
+- telur-ceplok-cumi-teriyaki.jpg
+- telur-ceplok-cumi.jpg
+
+[2. TELUR DADAR ORIGINAL]
+- telur-dadar-lugu.jpg
+- telur-dadar-ayam-suwir.jpg
+- telur-dadar-ceker.jpg
+- telur-dadar-kulit.jpg
+- telur-dadar-paru.jpg
+- telur-dadar-ayam-teriyaki.jpg
+- telur-dadar-cumi-teriyaki.jpg
+- telur-dadar-cumi.jpg
+
+[3. TELUR CEPLOK BAKAR]
+- telur-ceplok-bakar-ayam-suwir.jpg
+- telur-ceplok-bakar-ceker.jpg
+- telur-ceplok-bakar-kulit.jpg
+- telur-ceplok-bakar-paru.jpg
+- telur-ceplok-bakar-ayam-teriyaki.jpg
+- telur-ceplok-bakar-cumi-teriyaki.jpg
+- telur-ceplok-bakar-cumi.jpg
+
+[4. TELUR DADAR BAKAR]
+- telur-dadar-bakar-ayam-suwir.jpg
+- telur-dadar-bakar-ceker.jpg
+- telur-dadar-bakar-kulit.jpg
+- telur-dadar-bakar-paru.jpg
+- telur-dadar-bakar-ayam-teriyaki.jpg
+- telur-dadar-bakar-cumi-teriyaki.jpg
+- telur-dadar-bakar-cumi.jpg
+
+[5. DARGOR & MENU BARU]
+- ceker-crispy.jpg
+- dargor-ayam-suwir.jpg
+- dargor-kulit.jpg
+- dargor-ceker.jpg
+- dargor-paru.jpg
+- dargor-cumi.jpg
+- dargor-daging.jpg
+
+[6. KIDS MEALS]
+- kids-meal-dadar-ayam-teriyaki.jpg
+- kids-meal-ceplok-ayam-teriyaki.jpg
+
+[7. MINUMAN SEGAR]
+- es-kopi-susu-botol.jpg
+- es-blackcurrant-squash.jpg
+- es-jeruk-nipis.jpg
+- jeruk-hangat.jpg
+- air-mineral-botol-600ml.jpg
+- es-teh-manis.jpg
+- teh-hangat.jpg
+- teh-pucuk-harum.jpg
+
+[8. MENU TAMBAHAN (ADD-ON)]
+- selada-crispy.jpg
+- dadar-jagung.jpg
+- kerupuk.jpg
+- sambal-ijo-addon.jpg
+- nasi-putih.jpg
+- telur-dadar-crispy-alacarte.jpg
+- nasi-daun-jeruk.jpg
+- telur-ceplok-alacarte.jpg
+- telur-ceplok-bakar-bbq.jpg
+- oseng-sambal-ayam-suwir.jpg
+- oseng-sambal-ceker.jpg
+- oseng-sambal-kulit.jpg
+- oseng-ayam-teriyaki.jpg
+- oseng-sambal-paru.jpg
+- oseng-cumi-teriyaki.jpg
+- oseng-sambal-cumi.jpg
+
+[9. UPGRADE & TAMBAHAN]
+- upgrade-nasi-daun-jeruk.jpg
+- upgrade-ceplok-dadar-saos-bbq.jpg
+- tambahan-kotak-takeaway-lugu.jpg
+
+Catatan:
+Format file yang didukung: .jpg, .jpeg, .png, dan .webp.
+Rekomendasi rasio gambar: 1:1 (persegi) dengan resolusi minimal 500x500 pixel.
