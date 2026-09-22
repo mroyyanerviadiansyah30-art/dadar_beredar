@@ -154,7 +154,7 @@
 
                 <!-- Footer Guarantee Tip -->
                 <div class="p-3 bg-[#FFFDF7] rounded-xl border border-[#1E1E24] text-center text-[11px] text-gray-600 space-y-1">
-                    <p>💡 <em>Smart Redirect Bridge akan mendeteksi aplikasi di HP Anda secara otomatis dengan tautan deep-link resmi!</em></p>
+                    <p>⚡ <strong>100% Direct Store Link:</strong> <em>Terhubung langsung ke halaman resto resmi Dadar Beredar tanpa perlu mencari di kolom penelusuran aplikasi!</em></p>
                 </div>
 
             </div>

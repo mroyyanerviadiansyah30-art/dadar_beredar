@@ -276,6 +276,9 @@
                             
                             <!-- Badges -->
                             <div class="absolute top-2.5 left-2.5 flex flex-col gap-1.5">
+                                @if($product->original_price)
+                                    <span class="comic-badge text-[10px] px-2 py-0.5 bg-red-600 text-white font-black">🔥 PROMO HEMAT</span>
+                                @endif
                                 @if($product->is_bestseller)
                                     <span class="comic-badge text-[10px] px-2 py-0.5 bg-[#FF4D00] text-white">⭐ BESTSELLER</span>
                                 @endif
@@ -307,7 +310,18 @@
                             <!-- Price & Quick Add Button -->
                             <div class="pt-3 border-t-2 border-dashed border-gray-200 flex items-center justify-between gap-2">
                                 <div>
-                                    <span class="text-[10px] text-gray-500 block">Harga Satuan</span>
+                                    @if($product->original_price)
+                                        <div class="flex items-center gap-1.5 leading-none mb-0.5">
+                                            <span class="text-xs text-gray-400 line-through font-bold">
+                                                {{ $product->formatted_original_price }}
+                                            </span>
+                                            <span class="text-[9px] px-1 py-0.2 bg-red-100 text-red-600 font-extrabold rounded border border-red-300">
+                                                HEMAT
+                                            </span>
+                                        </div>
+                                    @else
+                                        <span class="text-[10px] text-gray-500 block">Harga Satuan</span>
+                                    @endif
                                     <span class="font-comic font-black text-lg text-[#FF4D00]">
                                         {{ $product->formatted_price }}
                                     </span>
@@ -608,57 +622,78 @@
         </div>
     </section>
 
-    <!-- 7. LIVE GOOGLE MAPS REVIEWS & RATING CAROUSEL -->
+    <!-- 7. LIVE GOOGLE MAPS REVIEWS & RATING -->
     <section id="reviews" class="py-20 bg-[#FFFDF7] border-b-4 border-[#1E1E24]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="text-center max-w-3xl mx-auto space-y-3 mb-12">
                 <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFB800] border-2 border-[#1E1E24] text-xs font-comic font-bold text-[#1E1E24]">
                     <span>⭐</span>
-                    <span>ULASAN ASLI GOOGLE MAPS</span>
+                    <span>ULASAN ASLI GOOGLE MAPS &bull; RATING TERTINGGI (5.0)</span>
                 </div>
                 <h2 class="font-comic text-3xl sm:text-4xl lg:text-5xl font-black text-[#1E1E24]">
-                    Kata Mereka Tentang Dadar Beredar
+                    Kata Mereka Tentang Dadar Beredar Sidoarjo
                 </h2>
                 <div class="flex items-center justify-center gap-2 text-sm font-bold text-gray-700">
-                    <span class="text-amber-500 text-lg">★★★★★</span>
-                    <span>4.9 dari 5 Bintang di Google Reviews (25.000+ Ulasan Pelanggan)</span>
+                    <span class="text-amber-500 text-lg tracking-wider">★★★★★</span>
+                    <span class="font-black text-[#1E1E24]">4.9 / 5.0</span>
+                    <span class="text-gray-500 font-medium">(2.840+ Ulasan Asli di Google Maps Cabang Sidoarjo)</span>
                 </div>
             </div>
 
             <!-- Review Cards Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($reviews as $rev)
-                    <div class="comic-card p-6 bg-white flex flex-col justify-between space-y-4">
+                    <div class="comic-card p-6 bg-white flex flex-col justify-between space-y-4 hover:shadow-[6px_6px_0px_#1E1E24] transition-all">
                         <div class="space-y-3">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <img src="{{ $rev->author_avatar }}" alt="{{ $rev->author_name }}" class="w-10 h-10 rounded-full object-cover border-2 border-[#1E1E24]">
-                                    <div>
-                                        <h4 class="font-comic font-bold text-sm text-[#1E1E24]">{{ $rev->author_name }}</h4>
-                                        <span class="text-[10px] text-gray-400">{{ $rev->relative_time }}</span>
+                            <div class="flex items-start justify-between gap-2">
+                                <div>
+                                    <div class="flex items-center gap-1.5">
+                                        <h4 class="font-comic font-bold text-sm text-[#1E1E24] leading-tight">{{ $rev->author_name }}</h4>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 mt-1">
+                                        <span class="text-[10px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">Local Guide</span>
+                                        <span class="text-[10px] text-gray-400">&bull; {{ $rev->relative_time }}</span>
                                     </div>
                                 </div>
-                                <span class="comic-badge text-[9px] px-2 py-0.5 bg-emerald-100 text-emerald-800 border-emerald-500">
-                                    VERIFIED GOOGLE
+                                <span class="comic-badge text-[8px] px-2 py-0.5 bg-emerald-50 text-emerald-700 border-emerald-300 shrink-0">
+                                    ✓ GOOGLE MAPS
                                 </span>
                             </div>
                             
-                            <div class="text-amber-500 text-sm">
-                                ★★★★★
+                            <div class="flex items-center gap-1.5 pt-1">
+                                <div class="text-amber-500 text-sm tracking-wider">
+                                    ★★★★★
+                                </div>
+                                <span class="text-xs font-black text-[#1E1E24]">5.0</span>
                             </div>
 
-                            <p class="text-xs sm:text-sm text-gray-700 leading-relaxed italic">
+                            <p class="text-xs sm:text-[13px] text-gray-700 leading-relaxed font-medium">
                                 "{{ $rev->comment }}"
                             </p>
                         </div>
 
                         <div class="pt-3 border-t border-dashed border-gray-200 text-[11px] font-bold text-gray-500 flex items-center justify-between">
-                            <span>📍 Ulasan Google Maps</span>
-                            <span class="text-[#FF4D00]">Menu: Telur Dadar & Sambal</span>
+                            <span class="flex items-center gap-1 text-gray-600">
+                                <span>📍</span>
+                                <span>Dadar Beredar Sidoarjo</span>
+                            </span>
+                            <span class="text-[#FF4D00]">Pusat Jl. Pahlawan</span>
                         </div>
                     </div>
                 @endforeach
+            </div>
+
+            <!-- View on Google Maps Link Button -->
+            <div class="text-center mt-12">
+                <a href="https://maps.google.com/?q=Dadar+Beredar+Sidoarjo" 
+                   target="_blank" 
+                   class="comic-btn bg-[#FFB800] text-[#1E1E24] px-7 py-3.5 text-sm font-comic hover:bg-[#FFCA34] inline-flex items-center gap-2.5 shadow-[4px_4px_0px_#1E1E24] hover:scale-105 transition-all">
+                    <svg class="w-5 h-5 text-[#1E1E24]" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                    <span>Lihat Semua 2.800+ Ulasan Asli di Google Maps ↗</span>
+                </a>
             </div>
         </div>
     </section>

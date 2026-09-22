@@ -204,7 +204,12 @@
                                         <img :src="product.image_url" :alt="product.name" class="w-12 h-12 rounded-xl object-cover border border-[#1E1E24]">
                                         <div>
                                             <h5 class="font-comic font-bold text-sm text-[#1E1E24] line-clamp-1" x-text="product.name"></h5>
-                                            <p class="text-xs font-extrabold text-[#FF4D00]" x-text="product.formatted_price"></p>
+                                            <div class="flex items-center gap-1.5">
+                                                <p class="text-xs font-extrabold text-[#FF4D00]" x-text="product.formatted_price"></p>
+                                                <template x-if="product.original_price">
+                                                    <span class="text-[10px] text-gray-400 line-through font-bold" x-text="product.formatted_original_price || formatRupiah(product.original_price)"></span>
+                                                </template>
+                                            </div>
                                         </div>
                                     </div>
                                     <button type="button" class="comic-btn bg-[#FFB800] text-xs px-2.5 py-1.5">Pilih</button>
@@ -521,6 +526,7 @@
                                 ✕
                             </button>
                             <div class="absolute bottom-3 left-3 flex gap-2">
+                                <span x-show="modalProduct.original_price" class="comic-badge bg-red-600 text-white text-[10px] px-2.5 py-1">🔥 PROMO HEMAT</span>
                                 <span x-show="modalProduct.is_crispy" class="comic-badge bg-[#FFB800] text-[#1E1E24] text-[10px] px-2.5 py-1">🍳 CRISPY JUARA</span>
                                 <span x-show="modalProduct.is_bestseller" class="comic-badge bg-[#FF4D00] text-white text-[10px] px-2.5 py-1">⭐ BESTSELLER</span>
                             </div>
@@ -531,11 +537,19 @@
                             <div>
                                 <h3 class="font-comic font-extrabold text-2xl text-[#1E1E24] leading-tight" x-text="modalProduct.name"></h3>
                                 <p class="text-xs text-gray-600 mt-1 leading-relaxed" x-text="modalProduct.description"></p>
-                                <p class="font-comic font-extrabold text-xl text-[#FF4D00] mt-2" x-text="formatRupiah(modalProduct.price)"></p>
+                                <div class="mt-2 flex items-center gap-2">
+                                    <span class="font-comic font-extrabold text-xl text-[#FF4D00]" x-text="formatRupiah(modalProduct.price)"></span>
+                                    <template x-if="modalProduct.original_price">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="text-xs text-gray-400 line-through font-bold" x-text="modalProduct.formatted_original_price || formatRupiah(modalProduct.original_price)"></span>
+                                            <span class="text-[9px] px-1.5 py-0.5 bg-red-100 text-red-600 font-extrabold rounded border border-red-300">HEMAT</span>
+                                        </div>
+                                    </template>
+                                </div>
                             </div>
 
                             <!-- Spice Choice Selector (for applicable food items) -->
-                            <div x-show="(modalProduct.type === 'food' || modalProduct.type === 'side') && !modalProduct.name.toLowerCase().includes('teriyaki') && !modalProduct.name.toLowerCase().includes('kids meal') && !['kerupuk', 'nasi putih', 'kotak takeaway'].some(w => modalProduct.name.toLowerCase().includes(w))" class="space-y-1.5">
+                            <div x-show="(modalProduct.type === 'food' || modalProduct.type === 'side' || modalProduct.type === 'combo') && !modalProduct.name.toLowerCase().includes('teriyaki') && !modalProduct.name.toLowerCase().includes('kids meal') && !['kerupuk', 'nasi putih', 'kotak takeaway', 'es batu'].some(w => modalProduct.name.toLowerCase().includes(w))" class="space-y-1.5">
                                 <label class="block font-comic font-bold text-xs text-[#1E1E24]">Pilihan Rasa:</label>
                                 <div class="grid grid-cols-2 gap-3">
                                     <button type="button" 

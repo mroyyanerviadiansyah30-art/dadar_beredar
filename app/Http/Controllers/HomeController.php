@@ -29,8 +29,9 @@ class HomeController extends Controller
             ?? $outlets->first();
 
         $reviews = Review::where('is_featured', true)
+            ->orderBy('rating', 'desc')
             ->orderBy('created_at', 'desc')
-            ->limit(8)
+            ->limit(9)
             ->get();
 
         return view('home', compact(

@@ -135,31 +135,31 @@
                         <div class="w-3 h-3 rounded-full animate-ping" style="background-color: {{ $platform['theme_color'] }}"></div>
                         <p class="font-comic font-bold text-sm text-[#1E1E24]">
                             <span x-show="isMobile && countdown > 0">
-                                Mengalihkan otomatis ke aplikasi dalam <strong class="text-xl font-black" x-text="countdown">2</strong> detik...
+                                Menghubungkan langsung ke resto dalam <strong class="text-xl font-black" x-text="countdown">1</strong> detik...
                             </span>
                             <span x-show="isMobile && countdown <= 0">
-                                Mengarahkan ke menu {{ $outlet->name }}...
+                                Membuka aplikasi langsung ke menu {{ $outlet->name }}...
                             </span>
                             <span x-show="!isMobile">
-                                Pindai QR Code di bawah dengan HP atau klik tombol buka menu!
+                                Pindai QR Code di bawah untuk membuka resto langsung di ponsel tanpa perlu mencari!
                             </span>
                         </p>
                     </div>
 
                     <!-- Promo Highlight Pill -->
-                    <div class="inline-block px-3 py-1 bg-white border-2 border-[#1E1E24] rounded-xl text-[11px] font-comic font-bold text-[#1E1E24]">
-                        {{ $platform['promo_badge'] }}
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-white border-2 border-[#1E1E24] rounded-xl text-[11px] font-comic font-bold text-[#1E1E24]">
+                        <span>✓ LINK LANGSUNG RESTO (BEBAS PENCARIAN)</span>
                     </div>
                 </div>
 
                 @if($platformKey === 'shopeefood')
-                    <!-- ShopeeFood Special App Notice -->
+                    <!-- ShopeeFood Direct Store Notice -->
                     <div class="p-3.5 bg-[#FFF3F0] rounded-2xl border-2 border-[#EE4D2D] text-xs text-[#1E1E24] flex items-start gap-2.5">
                         <span class="text-xl shrink-0">🛍️</span>
                         <div>
-                            <strong class="font-comic font-bold text-xs text-[#EE4D2D] block">Panduan Pesan ShopeeFood:</strong>
+                            <strong class="font-comic font-bold text-xs text-[#EE4D2D] block">Tautan Langsung Toko ShopeeFood:</strong>
                             <p class="text-[11px] text-gray-700 mt-0.5 leading-relaxed">
-                                ShopeeFood beroperasi khusus di aplikasi <strong>Shopee smartphone</strong>. Pindai QR Code di bawah dengan kamera HP Anda untuk langsung membuka aplikasi Shopee di ponsel Anda!
+                                Tautan ini otomatis membuka halaman toko resmi <strong>{{ $outlet->name }}</strong> di aplikasi ShopeeFood tanpa perlu mengetik nama restoran di kolom pencarian.
                             </p>
                         </div>
                     </div>
@@ -213,7 +213,7 @@
                     </div>
 
                     <p class="text-[11px] text-gray-500 leading-snug">
-                        Arahkan kamera smartphone Anda ke QR code di atas untuk langsung membuka menu <strong>Dadar Beredar {{ $outlet->city }}</strong> di aplikasi <strong>{{ $platform['name'] }}</strong>!
+                        Arahkan kamera smartphone Anda ke QR code di atas untuk langsung membuka resto <strong>{{ $outlet->name }}</strong> di aplikasi <strong>{{ $platform['name'] }}</strong> tanpa mengetik di pencarian!
                     </p>
                 </div>
 
@@ -227,7 +227,7 @@
                        @click="recordDirectClick()"
                        class="comic-btn w-full text-white py-3.5 text-base flex items-center justify-center gap-2 shadow-[4px_4px_0px_#1E1E24]"
                        style="background-color: {{ $platform['theme_color'] }};">
-                        <span>🚀 Buka Aplikasi {{ $platform['name'] }}</span>
+                        <span>🚀 Buka Menu Resto di Aplikasi {{ $platform['name'] }}</span>
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                         </svg>
@@ -238,7 +238,7 @@
                        target="_blank"
                        rel="noopener"
                        class="comic-btn w-full bg-[#FFFDF7] text-[#1E1E24] py-3 text-xs sm:text-sm flex items-center justify-center gap-2 hover:bg-[#FFF8DB]">
-                        <span>🌐 Buka via Web Browser (Tab Baru)</span>
+                        <span>🌐 Buka Halaman Resto di Web Browser</span>
                     </a>
 
                     <!-- Return to Home -->
@@ -312,8 +312,8 @@
                 schemeAndroid: '{{ $platform['scheme_android'] }}',
                 schemeIos: '{{ $platform['scheme_ios'] }}',
                 autoRedirect: {{ $autoRedirect ? 'true' : 'false' }},
-                countdown: 2,
-                progressPercent: 20,
+                countdown: 1,
+                progressPercent: 30,
                 showOutletModal: false,
 
                 get isMobile() {
@@ -321,23 +321,19 @@
                 },
 
                 initBridge() {
-                    // Update progress bar
-                    const totalDuration = 2000;
-                    const intervalMs = 200;
+                    // Fast responsive progress animation
+                    const totalDuration = 800;
+                    const intervalMs = 100;
                     let elapsed = 0;
 
                     const timer = setInterval(() => {
                         elapsed += intervalMs;
                         this.progressPercent = Math.min(100, Math.round((elapsed / totalDuration) * 100));
 
-                        if (elapsed >= 1000 && this.countdown > 1) {
-                            this.countdown = 1;
-                        }
-
                         if (elapsed >= totalDuration) {
                             clearInterval(timer);
                             this.countdown = 0;
-                            // Only auto-trigger native app intent on mobile
+                            // Trigger direct native restaurant app on mobile
                             if (this.autoRedirect && this.isMobile) {
                                 this.triggerMobileAppRedirect();
                             }

@@ -17,6 +17,7 @@ class Product extends Model
         'slug',
         'description',
         'price',
+        'original_price',
         'spiciness_level',
         'is_crispy',
         'is_bestseller',
@@ -29,6 +30,7 @@ class Product extends Model
 
     protected $casts = [
         'price' => 'float',
+        'original_price' => 'float',
         'spiciness_level' => 'integer',
         'is_crispy' => 'boolean',
         'is_bestseller' => 'boolean',
@@ -67,6 +69,14 @@ class Product extends Model
     public function getFormattedPriceAttribute(): string
     {
         return 'Rp ' . number_format($this->price, 0, ',', '.');
+    }
+
+    public function getFormattedOriginalPriceAttribute(): ?string
+    {
+        if (!$this->original_price) {
+            return null;
+        }
+        return 'Rp ' . number_format($this->original_price, 0, ',', '.');
     }
 
     public function getSpiceRatingHtmlAttribute(): string

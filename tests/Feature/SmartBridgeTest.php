@@ -97,4 +97,31 @@ class SmartBridgeTest extends TestCase
         $responseShopee->assertStatus(200);
         $responseShopee->assertSee('Dadar Beredar Waru Tropodo', false);
     }
+
+    public function test_bridge_urls_and_deep_links_are_direct_to_restaurant_without_search_query(): void
+    {
+        $outlet = Outlet::where('slug', 'dadar-beredar-sidoarjo')->first();
+
+        // 1. Verify outlet delivery URLs do NOT contain search keywords
+        $this->assertStringNotContainsString('search?keyword=', $outlet->getDeliveryUrl('shopeefood'));
+        $this->assertStringNotContainsString('restaurants?search=', $outlet->getDeliveryUrl('grabfood'));
+        $this->assertStringNotContainsString('?q=', $outlet->getDeliveryUrl('gofood'));
+
+        // 2. Verify direct store links in URLs
+        $this->assertStringContainsString('now-food/shop', $outlet->getDeliveryUrl('shopeefood'));
+        $this->assertStringContainsString('restaurant/dadar-beredar', $outlet->getDeliveryUrl('grabfood'));
+        $this->assertStringContainsString('restaurant/dadar-beredar', $outlet->getDeliveryUrl('gofood'));
+
+        // 3. Verify ShopeeFood bridge response contains direct intent & universal link
+        $shopeeResponse = $this->get('/bridge/shopeefood/dadar-beredar-sidoarjo');
+        $shopeeResponse->assertStatus(200);
+        $shopeeResponse->assertDontSee('search?keyword=', false);
+        $shopeeResponse->assertSee('intent://shopee.co.id/universal-link/now-food/shop', false);
+
+        // 4. Verify GrabFood bridge response contains direct intent & restaurant ID
+        $grabResponse = $this->get('/bridge/grabfood/dadar-beredar-sidoarjo');
+        $grabResponse->assertStatus(200);
+        $grabResponse->assertDontSee('restaurants?search=', false);
+        $grabResponse->assertSee('intent://food.grab.com/id/id/restaurant', false);
+    }
 }

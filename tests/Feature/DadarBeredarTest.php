@@ -130,4 +130,62 @@ class DadarBeredarTest extends TestCase
         $this->assertEquals('paid', $order->payment_status);
         $this->assertEquals('cooking', $order->order_status);
     }
+
+    public function test_new_beverages_and_combo_packages_exist_with_accurate_pricing(): void
+    {
+        // 1. Check drinks
+        $drinks = [
+            'es-cendol-dawet' => 13636,
+            'es-sweet-greentea' => 10909,
+            'es-coklat' => 15000,
+            'coklat-hangat' => 15000,
+            'es-batu' => 2727,
+            'es-strup-cincau' => 10909,
+        ];
+
+        foreach ($drinks as $slug => $expectedPrice) {
+            $product = Product::where('slug', $slug)->first();
+            $this->assertNotNull($product, "Product {$slug} should exist");
+            $this->assertEquals($expectedPrice, $product->price, "Price for {$slug} mismatch");
+            $this->assertEquals('minuman-segar', $product->category->slug);
+        }
+
+        // 2. Check combo packages with discount pricing
+        $combos = [
+            'paketan-pengedar-1' => [
+                'price' => 33636,
+                'original_price' => 37727,
+            ],
+            'pengedar-2' => [
+                'price' => 61818,
+                'original_price' => 75909,
+            ],
+            'pengedar-3' => [
+                'price' => 248182,
+                'original_price' => 272271,
+            ],
+        ];
+
+        foreach ($combos as $slug => $data) {
+            $product = Product::where('slug', $slug)->first();
+            $this->assertNotNull($product, "Combo {$slug} should exist");
+            $this->assertEquals($data['price'], $product->price, "Price for {$slug} mismatch");
+            $this->assertEquals($data['original_price'], $product->original_price, "Original price for {$slug} mismatch");
+            $this->assertEquals('paket-pengedar', $product->category->slug);
+        }
+
+        // 3. Check home page renders them
+        $response = $this->get('/');
+        $response->assertStatus(200);
+        $response->assertSee('Es Cendol Dawet', false);
+        $response->assertSee('Es Sweet Greentea', false);
+        $response->assertSee('Es Coklat', false);
+        $response->assertSee('Coklat Hangat', false);
+        $response->assertSee('Es Batu', false);
+        $response->assertSee('Es Strup Cincau', false);
+        $response->assertSee('Paketan Pengedar 1', false);
+        $response->assertSee('Pengedar 2', false);
+        $response->assertSee('Pengedar 3', false);
+        $response->assertSee('Paket Pengedar', false);
+    }
 }

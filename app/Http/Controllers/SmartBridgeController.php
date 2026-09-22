@@ -78,6 +78,10 @@ class SmartBridgeController extends Controller
         $allOutlets = Outlet::where('is_active', true)->orderBy('city')->get();
         $targetUrl = $outlet->getDeliveryUrl($platformKey);
 
+        // Dynamically compute direct restaurant app schemes (no search screen)
+        $config['scheme_android'] = $this->getOutletSchemeAndroid($platformKey, $outlet, $targetUrl);
+        $config['scheme_ios'] = $this->getOutletSchemeIos($platformKey, $outlet, $targetUrl);
+
         // Detect device
         $deviceType = $this->detectDevice($request);
 
@@ -174,6 +178,34 @@ class SmartBridgeController extends Controller
             return 'grabfood';
         }
         return 'gofood';
+    }
+
+    protected function getOutletSchemeAndroid(string $platformKey, Outlet $outlet, string $targetUrl): string
+    {
+        $cleanUrl = preg_replace('#^https?://#', '', $targetUrl);
+
+        return match ($platformKey) {
+            'shopeefood' => "intent://{$cleanUrl}#Intent;scheme=https;package=com.shopee.id;end",
+            'grabfood' => "intent://{$cleanUrl}#Intent;scheme=https;package=com.grabtaxi.passenger;end",
+            'gofood' => "intent://{$cleanUrl}#Intent;scheme=https;package=com.gojek.app;end",
+            default => $targetUrl,
+        };
+    }
+
+    protected function getOutletSchemeIos(string $platformKey, Outlet $outlet, string $targetUrl): string
+    {
+        return match ($platformKey) {
+            'shopeefood' => preg_match('~/now-food/shop/([0-9]+)~', $targetUrl, $m)
+                ? "shopeeid://universal-link/now-food/shop/{$m[1]}"
+                : (str_starts_with($targetUrl, 'http') ? "shopeeid://" . ltrim((string) parse_url($targetUrl, PHP_URL_PATH), '/') : $targetUrl),
+            'grabfood' => preg_match('~/(6-[A-Z0-9]+)~', $targetUrl, $m)
+                ? "grab://open?screenType=GRABFOOD&sourceID={$m[1]}"
+                : $targetUrl,
+            'gofood' => preg_match('~/restaurant/([^/?#]+)~', $targetUrl, $m)
+                ? "gojek://gofood/merchant/{$m[1]}"
+                : $targetUrl,
+            default => $targetUrl,
+        };
     }
 
     protected function detectDevice(Request $request): string

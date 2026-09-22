@@ -57,12 +57,11 @@ class Outlet extends Model
     public function getDeliveryUrl(string $platform): string
     {
         $platform = strtolower($platform);
-        $encodedName = urlencode($this->name);
 
         return match ($platform) {
-            'gofood' => $this->gofood_url ?: "https://gofood.co.id/id/{$this->slug}?q={$encodedName}",
-            'grabfood' => $this->grabfood_url ?: "https://food.grab.com/id/id/restaurant/{$this->slug}",
-            'shopeefood' => $this->shopeefood_url ?: "https://shopee.co.id/universal-link/now-food/shop/{$this->slug}",
+            'gofood' => $this->gofood_url ?: "https://gofood.co.id/sidoarjo/restaurant/{$this->slug}",
+            'grabfood' => $this->grabfood_url ?: "https://food.grab.com/id/id/restaurant/{$this->slug}-delivery-menu/6-C3KTLNTKT2TGVA",
+            'shopeefood' => $this->shopeefood_url ?: "https://shopee.co.id/universal-link/now-food/shop/21888492",
             default => url('/'),
         };
     }
