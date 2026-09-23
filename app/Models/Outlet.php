@@ -39,6 +39,10 @@ class Outlet extends Model
         'is_active' => 'boolean',
     ];
 
+    protected $appends = [
+        'whatsapp_link',
+    ];
+
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);

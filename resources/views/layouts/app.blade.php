@@ -201,7 +201,14 @@
                                 <div class="comic-box-sm bg-white p-3 rounded-2xl border-2 border-[#1E1E24] flex items-center justify-between gap-3 hover:bg-[#FFFDF5] cursor-pointer"
                                      @click="openProductModal(product); searchOpen = false">
                                     <div class="flex items-center gap-3">
-                                        <img :src="product.image_url" :alt="product.name" class="w-12 h-12 rounded-xl object-cover border border-[#1E1E24]">
+                                        <template x-if="product.image_url">
+                                            <img :src="product.image_url" :alt="product.name" class="w-12 h-12 rounded-xl object-cover border border-[#1E1E24]">
+                                        </template>
+                                        <template x-if="!product.image_url">
+                                            <div class="w-12 h-12 rounded-xl bg-[#FFF8DB] border border-[#1E1E24] flex items-center justify-center text-xl shrink-0">
+                                                <span x-text="product.slug && (product.slug.includes('saos') || product.slug.includes('bbq')) ? '🥫' : (product.slug && (product.slug.includes('kotak') || product.slug.includes('takeaway')) ? '📦' : (product.slug && product.slug.includes('kerupuk') ? '🍘' : '🍳'))"></span>
+                                            </div>
+                                        </template>
                                         <div>
                                             <h5 class="font-comic font-bold text-sm text-[#1E1E24] line-clamp-1" x-text="product.name"></h5>
                                             <div class="flex items-center gap-1.5">
@@ -315,7 +322,14 @@
                             <div class="p-3.5 bg-white rounded-2xl border-2 border-[#1E1E24] shadow-[3px_3px_0px_#1E1E24] space-y-2.5">
                                 <div class="flex items-start justify-between gap-3">
                                     <div class="flex items-center gap-3">
-                                        <img :src="item.image_url" :alt="item.name" class="w-12 h-12 rounded-xl object-cover border border-[#1E1E24]">
+                                        <template x-if="item.image_url">
+                                            <img :src="item.image_url" :alt="item.name" class="w-12 h-12 rounded-xl object-cover border border-[#1E1E24]">
+                                        </template>
+                                        <template x-if="!item.image_url">
+                                            <div class="w-12 h-12 rounded-xl bg-[#FFF8DB] border border-[#1E1E24] flex items-center justify-center text-xl shrink-0">
+                                                <span x-text="(item.slug || item.name.toLowerCase()).includes('saos') || (item.slug || item.name.toLowerCase()).includes('bbq') ? '🥫' : ((item.slug || item.name.toLowerCase()).includes('kotak') || (item.slug || item.name.toLowerCase()).includes('takeaway') ? '📦' : ((item.slug || item.name.toLowerCase()).includes('kerupuk') ? '🍘' : '🍳'))"></span>
+                                            </div>
+                                        </template>
                                         <div>
                                             <h5 class="font-comic font-bold text-sm text-[#1E1E24] leading-snug" x-text="item.name"></h5>
                                             <p class="text-xs font-extrabold text-[#FF4D00]" x-text="formatRupiah(item.price)"></p>
@@ -402,7 +416,7 @@
                             <label class="block font-comic font-bold text-xs text-[#1E1E24]">Pilih Cabang Outlet:</label>
                             <select name="outlet_id" x-model="selectedOutletId" 
                                     class="w-full bg-white border-2 border-[#1E1E24] rounded-xl px-3 py-2 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#FFB800]">
-                                @foreach(\App\Models\Outlet::where('is_active', true)->get() as $outlet)
+                                @foreach($globalOutlets ?? \App\Models\Outlet::where('is_active', true)->get() as $outlet)
                                     <option value="{{ $outlet->id }}">
                                         {{ $outlet->name }} ({{ $outlet->city }})
                                     </option>
@@ -520,9 +534,19 @@
                 <template x-if="modalProduct">
                     <div>
                         <!-- Modal Image & Close -->
-                        <div class="relative h-56 bg-[#FFF8DB] border-b-3 border-[#1E1E24] overflow-hidden">
-                            <img :src="modalProduct.image_url" :alt="modalProduct.name" class="w-full h-full object-cover">
-                            <button @click="modalProduct = null" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 border-2 border-[#1E1E24] flex items-center justify-center font-bold hover:bg-white">
+                        <div class="relative bg-[#FFF8DB] border-b-3 border-[#1E1E24] overflow-hidden" :class="modalProduct.image_url ? 'h-56' : 'h-40'">
+                            <template x-if="modalProduct.image_url">
+                                <img :src="modalProduct.image_url" :alt="modalProduct.name" class="w-full h-full object-cover">
+                            </template>
+                            <template x-if="!modalProduct.image_url">
+                                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#FFF9E6] to-[#FFE8A3] p-4 text-center select-none">
+                                    <div class="w-14 h-14 rounded-2xl bg-white border-2 border-[#1E1E24] shadow-[3px_3px_0px_#1E1E24] flex items-center justify-center text-3xl mb-1.5">
+                                        <span x-text="(modalProduct.slug || modalProduct.name.toLowerCase()).includes('saos') || (modalProduct.slug || modalProduct.name.toLowerCase()).includes('bbq') ? '🥫' : ((modalProduct.slug || modalProduct.name.toLowerCase()).includes('kotak') || (modalProduct.slug || modalProduct.name.toLowerCase()).includes('takeaway') ? '📦' : ((modalProduct.slug || modalProduct.name.toLowerCase()).includes('kerupuk') ? '🍘' : '🍳'))"></span>
+                                    </div>
+                                    <span class="text-[10px] font-black uppercase tracking-wider text-gray-500">Menu Tambahan (Tanpa Foto)</span>
+                                </div>
+                            </template>
+                            <button @click="modalProduct = null" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 border-2 border-[#1E1E24] flex items-center justify-center font-bold hover:bg-white z-10">
                                 ✕
                             </button>
                             <div class="absolute bottom-3 left-3 flex gap-2">
@@ -676,15 +700,15 @@
                     </ul>
                 </div>
 
-                <!-- Headquarters & Contact -->
+                <!-- Headquarters & Contact (Dynamic DB Data) -->
                 <div class="space-y-3">
                     <h4 class="font-comic font-bold text-sm text-[#FFB800] uppercase tracking-wider">Kantor & Cabang Sidoarjo</h4>
                     <p class="text-xs text-gray-300 leading-relaxed">
-                        Jl. Pahlawan No. 45, Sidokumpul, Kec. Sidoarjo, Kabupaten Sidoarjo, Jawa Timur 61213
+                        {{ $primaryOutlet->address ?? 'Jl. Pahlawan No. 45, Sidokumpul, Kec. Sidoarjo, Kabupaten Sidoarjo, Jawa Timur 61213' }}
                     </p>
                     <div class="pt-1 text-xs space-y-1 text-gray-300">
-                        <p><strong>Jam Buka:</strong> 10:00 - 22:30 WIB</p>
-                        <p><strong>WhatsApp Hotline:</strong> +62 812-3456-7890</p>
+                        <p><strong>Jam Buka:</strong> {{ $primaryOutlet->opening_hours ?? '10:00 - 22:30 WIB' }}</p>
+                        <p><strong>WhatsApp Hotline:</strong> {{ $primaryOutlet->phone ?? '+62 812-3456-7890' }}</p>
                     </div>
                 </div>
             </div>
@@ -817,6 +841,7 @@
                         this.cartItems.push({
                             id: this.modalProduct.id,
                             name: this.modalProduct.name,
+                            slug: this.modalProduct.slug,
                             price: this.modalProduct.price,
                             image_url: this.modalProduct.image_url,
                             quantity: this.modalQty,
@@ -838,6 +863,7 @@
                         this.cartItems.push({
                             id: product.id,
                             name: product.name,
+                            slug: product.slug,
                             price: product.price,
                             image_url: product.image_url,
                             quantity: 1,

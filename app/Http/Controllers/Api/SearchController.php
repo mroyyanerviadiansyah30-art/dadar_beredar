@@ -37,6 +37,7 @@ class SearchController extends Controller
                 return [
                     'id' => $product->id,
                     'name' => $product->name,
+                    'slug' => $product->slug,
                     'category' => $product->category->name ?? 'Menu',
                     'price' => $product->price,
                     'formatted_price' => $product->formatted_price,

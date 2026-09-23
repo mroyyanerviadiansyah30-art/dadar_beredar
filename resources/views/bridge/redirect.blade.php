@@ -173,8 +173,10 @@
                                 <h3 class="font-comic font-bold text-base text-[#1E1E24]">
                                     {{ $outlet->name }}
                                 </h3>
-                                @if($outlet->city === 'Sidoarjo')
+                                @if($outlet->slug === 'dadar-beredar-sidoarjo')
                                     <span class="comic-badge text-[9px] px-1.5 py-0.5 bg-[#FF4D00] text-white">PUSAT</span>
+                                @elseif($outlet->slug === 'dadar-beredar-waru-tropodo')
+                                    <span class="comic-badge text-[9px] px-1.5 py-0.5 bg-[#FFB800] text-[#1E1E24]">WARU TROPODO</span>
                                 @endif
                             </div>
                             <p class="text-xs text-gray-600 mt-1 leading-relaxed">

@@ -75,15 +75,15 @@
                         </button>
                     </div>
 
-                    <!-- Highlight Badges / Social Proof -->
+                    <!-- Highlight Badges / Social Proof (Dynamic DB Data) -->
                     <div class="grid grid-cols-3 gap-3 pt-6 max-w-lg mx-auto lg:mx-0">
                         <div class="comic-box-sm bg-white p-3 rounded-2xl border-2 border-[#1E1E24] shadow-[3px_3px_0px_#1E1E24] text-center">
-                            <div class="font-comic font-black text-xl text-[#FF4D00]">4.9 / 5.0</div>
-                            <div class="text-[11px] font-bold text-gray-600">⭐ 25.000+ Ulasan</div>
+                            <div class="font-comic font-black text-xl text-[#FF4D00]">{{ number_format($outlets->avg('rating'), 1) }} / 5.0</div>
+                            <div class="text-[11px] font-bold text-gray-600">⭐ {{ number_format($outlets->sum('review_count'), 0, ',', '.') }}+ Ulasan</div>
                         </div>
                         <div class="comic-box-sm bg-white p-3 rounded-2xl border-2 border-[#1E1E24] shadow-[3px_3px_0px_#1E1E24] text-center">
-                            <div class="font-comic font-black text-xl text-[#FFB800]">8+ Kota</div>
-                            <div class="text-[11px] font-bold text-gray-600">📍 Sidoarjo, Sby, Jkt...</div>
+                            <div class="font-comic font-black text-xl text-[#FFB800]">{{ $outlets->pluck('city')->unique()->count() }} Kota</div>
+                            <div class="text-[11px] font-bold text-gray-600">📍 {{ $outlets->count() }} Cabang Resmi</div>
                         </div>
                         <div class="comic-box-sm bg-white p-3 rounded-2xl border-2 border-[#1E1E24] shadow-[3px_3px_0px_#1E1E24] text-center">
                             <div class="font-comic font-black text-xl text-emerald-600">100%</div>
@@ -147,13 +147,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
-                <!-- Imagery Grid -->
+                <!-- Imagery Grid: Authentic Dadar Beredar Outlet Building Tribute -->
                 <div class="lg:col-span-5 space-y-4">
-                    <div class="comic-card p-3 bg-[#FFF8DB] rotate-[-2deg]">
-                        <img src="/images/crispy-dadar.jpg" alt="Signature Dadar Beredar Platter" class="w-full h-72 object-cover rounded-xl border-2 border-[#1E1E24]">
+                    <div class="comic-card p-3 bg-[#FFF8DB] rotate-[-2deg] hover:rotate-0 transition-transform duration-300">
+                        <img src="/images/outlet-tribute-babe-cabita.jpg" alt="Gedung & Outlet Resmi Dadar Beredar by Babe Cabita" class="w-full h-80 sm:h-96 object-cover object-top rounded-xl border-2 border-[#1E1E24] shadow-[3px_3px_0px_#1E1E24]">
                         <div class="p-3">
-                            <h4 class="font-comic font-bold text-base text-[#1E1E24]">Sajian Hangat Penuh Kenangan</h4>
-                            <p class="text-xs text-gray-600">Resep otentik telur dadar kress yang diracik khusus bersama King Abdi.</p>
+                            <h4 class="font-comic font-bold text-base text-[#1E1E24]">Outlet Resmi Dadar Beredar by Babe Cabita</h4>
+                            <p class="text-xs text-gray-600">"Mau diceplok, didadar, apa disayang?" &bull; Warisan senyum tawa dan cita rasa khas sang legenda.</p>
                         </div>
                     </div>
                 </div>
@@ -270,9 +270,29 @@
                         
                         <!-- Product Image & Badges -->
                         <div class="relative h-48 bg-[#FFF8DB] overflow-hidden border-b-3 border-[#1E1E24]">
-                            <img src="{{ $product->image_url ?? '/images/crispy-dadar.jpg' }}" 
-                                 alt="{{ $product->name }}" 
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            @if($product->image_url)
+                                <img src="{{ $product->image_url }}" 
+                                     alt="{{ $product->name }}" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            @else
+                                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#FFF9E6] via-[#FFF3CC] to-[#FFE8A3] p-4 text-center select-none group-hover:bg-[#FFF1C2] transition-colors">
+                                    <div class="w-16 h-16 rounded-2xl bg-white border-2 border-[#1E1E24] shadow-[3px_3px_0px_#1E1E24] flex items-center justify-center text-3xl mb-1.5 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                                        @if(str_contains(strtolower($product->slug), 'saos') || str_contains(strtolower($product->slug), 'bbq'))
+                                            🥫
+                                        @elseif(str_contains(strtolower($product->slug), 'kotak') || str_contains(strtolower($product->slug), 'takeaway'))
+                                            📦
+                                        @elseif(str_contains(strtolower($product->slug), 'kerupuk'))
+                                            🍘
+                                        @else
+                                            🍳
+                                        @endif
+                                    </div>
+                                    <span class="inline-block px-2.5 py-0.5 rounded-full bg-[#1E1E24] text-white text-[10px] font-black tracking-wider uppercase">
+                                        {{ $product->category->name }}
+                                    </span>
+                                    <span class="text-[11px] font-bold text-gray-500 mt-1">Menu Tambahan (Tanpa Foto)</span>
+                                </div>
+                            @endif
                             
                             <!-- Badges -->
                             <div class="absolute top-2.5 left-2.5 flex flex-col gap-1.5">
@@ -430,13 +450,17 @@
                         </div>
                     </div>
 
-                    <!-- Right Delivery Callout -->
-                    <div class="lg:col-span-5 flex flex-col items-center justify-center text-center p-6 bg-[#FFF8DB] rounded-3xl border-3 border-[#1E1E24] shadow-[4px_4px_0px_#1E1E24]">
-                        <img src="/images/logo-dadar-beredar.png" alt="Dadar Beredar Sidoarjo Delivery" class="w-48 h-auto object-contain mb-4 filter drop-shadow-sm">
-                        <h4 class="font-comic font-extrabold text-xl text-[#1E1E24]">"Dadar Beredar Siap Meluncur!"</h4>
-                        <p class="text-xs text-gray-600 mt-1 max-w-xs">
-                            Kresss di luar, juicy lembut di dalam. Selalu dikirim dalam kondisi fresh hangat langsung dari wajan!
-                        </p>
+                    <!-- Right Delivery Callout: Authentic DAR-DOR Promo Poster -->
+                    <div class="lg:col-span-5 flex flex-col items-center justify-center p-3 sm:p-4 bg-[#FFF8DB] rounded-3xl border-3 border-[#1E1E24] shadow-[4px_4px_0px_#1E1E24] group">
+                        <div class="relative overflow-hidden rounded-2xl border-2 border-[#1E1E24] shadow-[3px_3px_0px_#1E1E24] w-full">
+                            <img src="/images/dardor-delivery-promo.png" 
+                                 alt="DAR-DOR Dadar Beredar Delivery Order - Diskon Ongkir 50%" 
+                                 class="w-full h-auto max-h-[460px] object-cover rounded-2xl group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="mt-3 text-center">
+                            <span class="comic-badge text-[10px] px-2.5 py-1 bg-[#FF4D00] text-white">🛵 DAR-DOR DELIVERY RESMI</span>
+                            <p class="font-comic font-bold text-xs text-[#1E1E24] mt-1">Diskon Ongkir 50% &bull; Halal Indonesia &bull; Fresh dari Wajan</p>
+                        </div>
                     </div>
 
                 </div>
@@ -464,44 +488,30 @@
 
             <!-- GPS Auto-Detect Button & City Filter -->
             <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-                <!-- City Buttons -->
+                <!-- City Buttons (Dynamic from Database) -->
                 <div class="flex flex-wrap gap-2">
                     <button type="button" 
                             @click="selectCity('all')"
                             :class="selectedCity === 'all' ? 'bg-[#FFB800] border-[#1E1E24] shadow-[3px_3px_0px_#1E1E24]' : 'bg-white border-gray-300'"
                             class="comic-btn text-xs px-3.5 py-2">
-                        Semua Kota
+                        Semua Kota ({{ $outlets->count() }})
                     </button>
-                    <button type="button" 
-                            @click="selectCity('Sidoarjo')"
-                            :class="selectedCity === 'Sidoarjo' ? 'bg-[#FFB800] border-[#1E1E24] shadow-[3px_3px_0px_#1E1E24]' : 'bg-white border-gray-300'"
-                            class="comic-btn text-xs px-3.5 py-2">
-                        ⭐ Sidoarjo (Pusat & Waru)
-                    </button>
-                    <button type="button" 
-                            @click="selectCity('Surabaya')"
-                            :class="selectedCity === 'Surabaya' ? 'bg-[#FFB800] border-[#1E1E24] shadow-[3px_3px_0px_#1E1E24]' : 'bg-white border-gray-300'"
-                            class="comic-btn text-xs px-3.5 py-2">
-                        Surabaya
-                    </button>
-                    <button type="button" 
-                            @click="selectCity('Jakarta Selatan')"
-                            :class="selectedCity === 'Jakarta Selatan' ? 'bg-[#FFB800] border-[#1E1E24] shadow-[3px_3px_0px_#1E1E24]' : 'bg-white border-gray-300'"
-                            class="comic-btn text-xs px-3.5 py-2">
-                        Jakarta
-                    </button>
-                    <button type="button" 
-                            @click="selectCity('Medan')"
-                            :class="selectedCity === 'Medan' ? 'bg-[#FFB800] border-[#1E1E24] shadow-[3px_3px_0px_#1E1E24]' : 'bg-white border-gray-300'"
-                            class="comic-btn text-xs px-3.5 py-2">
-                        Medan (Tanah Babe)
-                    </button>
-                    <button type="button" 
-                            @click="selectCity('Bandung')"
-                            :class="selectedCity === 'Bandung' ? 'bg-[#FFB800] border-[#1E1E24] shadow-[3px_3px_0px_#1E1E24]' : 'bg-white border-gray-300'"
-                            class="comic-btn text-xs px-3.5 py-2">
-                        Bandung
-                    </button>
+                    @foreach($outlets->pluck('city')->unique() as $city)
+                        <button type="button" 
+                                @click="selectCity('{{ $city }}')"
+                                :class="selectedCity === '{{ $city }}' ? 'bg-[#FFB800] border-[#1E1E24] shadow-[3px_3px_0px_#1E1E24]' : 'bg-white border-gray-300'"
+                                class="comic-btn text-xs px-3.5 py-2">
+                            @if($city === 'Sidoarjo')
+                                ⭐ Sidoarjo (Pusat & Waru)
+                            @elseif($city === 'Medan')
+                                Medan (Tanah Babe)
+                            @elseif($city === 'Jakarta Selatan')
+                                Jakarta
+                            @else
+                                {{ $city }}
+                            @endif
+                        </button>
+                    @endforeach
                 </div>
 
                 <!-- GPS Location Detector -->
@@ -636,8 +646,8 @@
                 </h2>
                 <div class="flex items-center justify-center gap-2 text-sm font-bold text-gray-700">
                     <span class="text-amber-500 text-lg tracking-wider">★★★★★</span>
-                    <span class="font-black text-[#1E1E24]">4.9 / 5.0</span>
-                    <span class="text-gray-500 font-medium">(2.840+ Ulasan Asli di Google Maps Cabang Sidoarjo)</span>
+                    <span class="font-black text-[#1E1E24]">{{ number_format($primaryOutlet->rating, 1) }} / 5.0</span>
+                    <span class="text-gray-500 font-medium">({{ number_format($primaryOutlet->review_count, 0, ',', '.') }}+ Ulasan Asli di Google Maps {{ $primaryOutlet->name }})</span>
                 </div>
             </div>
 
@@ -665,7 +675,7 @@
                                 <div class="text-amber-500 text-sm tracking-wider">
                                     ★★★★★
                                 </div>
-                                <span class="text-xs font-black text-[#1E1E24]">5.0</span>
+                                <span class="text-xs font-black text-[#1E1E24]">{{ number_format($rev->rating, 1) }}</span>
                             </div>
 
                             <p class="text-xs sm:text-[13px] text-gray-700 leading-relaxed font-medium">
@@ -676,9 +686,9 @@
                         <div class="pt-3 border-t border-dashed border-gray-200 text-[11px] font-bold text-gray-500 flex items-center justify-between">
                             <span class="flex items-center gap-1 text-gray-600">
                                 <span>📍</span>
-                                <span>Dadar Beredar Sidoarjo</span>
+                                <span>{{ $rev->outlet->name ?? 'Dadar Beredar Sidoarjo' }}</span>
                             </span>
-                            <span class="text-[#FF4D00]">Pusat Jl. Pahlawan</span>
+                            <span class="text-[#FF4D00]">{{ $rev->outlet->city ?? 'Sidoarjo' }}</span>
                         </div>
                     </div>
                 @endforeach

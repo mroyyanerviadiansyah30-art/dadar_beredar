@@ -28,7 +28,8 @@ class HomeController extends Controller
         $primaryOutlet = Outlet::where('slug', 'dadar-beredar-sidoarjo')->first() 
             ?? $outlets->first();
 
-        $reviews = Review::where('is_featured', true)
+        $reviews = Review::with('outlet')
+            ->where('is_featured', true)
             ->orderBy('rating', 'desc')
             ->orderBy('created_at', 'desc')
             ->limit(9)

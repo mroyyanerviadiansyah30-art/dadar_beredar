@@ -39,6 +39,11 @@ class Product extends Model
         'is_available' => 'boolean',
     ];
 
+    protected $appends = [
+        'formatted_price',
+        'formatted_original_price',
+    ];
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
@@ -105,9 +110,14 @@ class Product extends Model
         return '<span class="text-xs font-bold text-red-700 bg-red-100 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">🌶️ Pedas</span>';
     }
 
-    public function getImageUrlAttribute(?string $value): string
+    public function getImageUrlAttribute(?string $value): ?string
     {
-        // 1. Check if user provided an override file named after product slug in public/images/menu/
+        // 1. Items explicitly configured without photo
+        if (in_array($this->slug, ['upgrade-ceplok-dadar-saos-bbq', 'tambahan-kotak-takeaway-lugu', 'kerupuk'])) {
+            return null;
+        }
+
+        // 2. Check if user provided an override file named after product slug in public/images/menu/
         $slug = $this->slug;
         if (!empty($slug)) {
             foreach (['jpg', 'jpeg', 'png', 'webp'] as $ext) {
@@ -117,7 +127,7 @@ class Product extends Model
             }
         }
 
-        // 2. Check if the database attribute points to an existing file
+        // 3. Check if the database attribute points to an existing file
         if (!empty($value) && file_exists(public_path(ltrim($value, '/')))) {
             return $value;
         }
@@ -126,8 +136,8 @@ class Product extends Model
             return $value;
         }
 
-        // 3. Fallback
-        return '/images/crispy-dadar.jpg';
+        // 4. Return null if no image is available
+        return null;
     }
 }
 

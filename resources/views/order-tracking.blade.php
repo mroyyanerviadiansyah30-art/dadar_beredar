@@ -296,15 +296,19 @@
                         </div>
                         <h2 class="font-bold text-base tracking-wider text-black">DADAR BEREDAR</h2>
                         <p class="text-[11px] font-bold text-gray-700 uppercase tracking-wide">
-                            CABANG PUSAT SIDOARJO
+                            @if(($order->outlet->slug ?? '') === 'dadar-beredar-sidoarjo')
+                                CABANG PUSAT SIDOARJO
+                            @else
+                                CABANG {{ strtoupper($order->outlet->name ?? 'PUSAT SIDOARJO') }}
+                            @endif
                         </p>
                         <p class="text-[10px] text-gray-600 leading-tight">
                             Sensasi Telur Dadar Krispy Tiada Lawan<br>
                             Khas Almarhum Babe Cabita & King Abdi
                         </p>
                         <p class="text-[10px] text-gray-600 mt-1">
-                            Jl. Pahlawan No. 45, Sidokumpul, Sidoarjo 61213<br>
-                            Hotline/WA: +62 812-3456-7890
+                            {{ $order->outlet->address ?? 'Jl. Pahlawan No. 45, Sidokumpul, Sidoarjo 61213' }}<br>
+                            Hotline/WA: {{ $order->outlet->phone ?? '+62 812-3456-7890' }}
                         </p>
                     </div>
 
@@ -320,7 +324,7 @@
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-500">Kasir:</span>
-                            <span>Kasir 01 (Sidoarjo Pusat)</span>
+                            <span>Kasir 01 ({{ $order->outlet->city ?? 'Sidoarjo' }})</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-500">Pelanggan:</span>
@@ -521,15 +525,16 @@
             get rawReceiptText() {
                 return `========================================
        🍳 DADAR BEREDAR 🍳
-      CABANG PUSAT SIDOARJO
- Sensasi Telur Dadar Krispy Tiada Lawan
-      By Almarhum Babe Cabita
- Jl. Pahlawan No. 45, Sidokumpul
- Telp/WA: +62 812-3456-7890
+      @if(($order->outlet->slug ?? '') === 'dadar-beredar-sidoarjo')CABANG PUSAT SIDOARJO@else{{ strtoupper($order->outlet->name ?? 'CABANG PUSAT SIDOARJO') }}@endif
+
+  Sensasi Telur Dadar Krispy Tiada Lawan
+       By Almarhum Babe Cabita
+  {{ $order->outlet->address ?? 'Jl. Pahlawan No. 45, Sidokumpul' }}
+  Telp/WA: {{ $order->outlet->phone ?? '+62 812-3456-7890' }}
 ========================================
 No. Struk : {{ $order->order_number }}
 Waktu     : {{ $order->created_at->format('d/m/Y H:i:s') }} WIB
-Kasir     : Kasir 01 (Sidoarjo Pusat)
+Kasir     : Kasir 01 ({{ $order->outlet->city ?? 'Sidoarjo' }})
 Pelanggan : {{ $order->customer_name }}
 WhatsApp  : {{ $order->customer_phone }}
 Layanan   : [ {{ strtoupper($order->delivery_label) }} ]

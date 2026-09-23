@@ -55,7 +55,7 @@
                     </div>
                     <select x-model="bridgeSelectedOutletSlug" 
                             class="w-full bg-white border-2 border-[#1E1E24] rounded-xl px-3 py-2 text-xs font-bold text-[#1E1E24] focus:outline-none focus:ring-2 focus:ring-[#FFB800]">
-                        @foreach(\App\Models\Outlet::where('is_active', true)->orderBy('city')->get() as $outlet)
+                        @foreach($globalOutlets ?? \App\Models\Outlet::where('is_active', true)->orderBy('city')->get() as $outlet)
                             <option value="{{ $outlet->slug }}">
                                 {{ $outlet->name }} ({{ $outlet->city }}) - ⭐ {{ $outlet->rating }}
                             </option>
